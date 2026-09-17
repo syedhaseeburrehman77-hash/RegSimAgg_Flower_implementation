@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "regsimagg-flower"
+version = "0.1.0"
+description = "Flower reproduction-oriented implementation of RegSimAgg"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "flwr[simulation]>=1.36.0,<1.37.0",
+  "torch>=2.2",
+  "torchvision>=0.17",
+  "numpy>=1.26,<3",
+  "nibabel>=5.2",
+  "scipy>=1.11",
+  "monai>=1.3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["regsimagg"]
+
+[tool.flwr.app]
+publisher = "local"
+name = "regsimagg-flower"
+version = "0.1.0"
+description = "RegSimAgg reproduction-oriented Flower app"
+
+[tool.flwr.app.components]
+serverapp = "regsimagg.server_app:app"
+clientapp = "regsimagg.client_app:app"
+
+[tool.flwr.app.config]
+num-server-rounds = 10
+fraction-train = 0.2
+fraction-evaluate = 1.0
+local-epochs = 1
+learning-rate = 0.00005
+batch-size = 1
+data-root = "./data"
+num-workers = 0
+use-github-compat-distance = true
+regularization-round = 10
+layerwise-aggregation = false
+aggregation-method = "regsimagg"
+collaborator-selector = "without_repetition"
+hyperparameters-schedule = "constant"
+model-type = "small_unet"
+batches-per-round = 16
+epochs-per-round = 1.0
+
+
+#######################################################################
+# CONFIGURATION MIGRATION NOTICE:
+#
+# What was previously called "federation config" for SuperLink
+# connections in pyproject.toml has been renamed and moved.
+#
+# These settings are now **SuperLink connection configuration**
+# and are defined in the Flower configuration file.
+#
+# The entries below are commented out intentionally and are kept
+# only as a migration reference.
+#
+# Docs: https://flower.ai/docs/framework/ref-flower-configuration.html
+#######################################################################
+
+# [tool.flwr.federations]
+# default = "local-simulation"
+
+# [tool.flwr.federations.local-simulation]
+# options.num-supernodes = 5
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = [".venv", "venv", "build", "dist", ".git", ".pytest_cache"]
