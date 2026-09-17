@@ -28,7 +28,7 @@ Reference GitHub: [`dskhanirfan/FeTS2022`](https://github.com/dskhanirfan/FeTS20
 ### 3. Aggregation Engine (`regsimagg/regsimagg.py`)
 - **`my_sum`**: Exact multi-dimensional recursive summation from the FeTS GitHub codebase.
 - **`similarity_weights`**:
-  - `github_compat`: $d_c = |\text{my\_sum}(\hat{p}) - \text{my\_sum}(p_c)|$ matching the public GitHub code.
+  - `github_compat`: $d_c = |\mathrm{sum}(\hat{p}) - \mathrm{sum}(p_c)|$ using the recursive `my_sum` function from the author's public repository.
   - `paper_l1`: $d_c = \|p_c - \hat{p}\|_1 = \sum |p_c - \hat{p}|$ matching Eq. (2) from the paper.
   - Normalization $u_c = s_c / \sum s_j$ (Eq. 3).
 - **`sample_weights`**: $v_c = N_c / \sum N_i$ (Eq. 4).
